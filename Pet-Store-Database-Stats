@@ -1,0 +1,34 @@
+---Create a pet store database
+
+CREATE TABLE pet_store (id INTEGER PRIMARY KEY, species TEXT, age INTEGER, color TEXT, price INTEGER, popularity TEXT);
+
+INSERT INTO pet_store VALUES (1, "Dog", 2, "Brown", 250.00, 90);
+INSERT INTO pet_store VALUES (2, "Cat", 2, "White", 50.00, 89);
+INSERT INTO pet_store VALUES (3, "Hamster", 2, "Brown", 25.00, 55);
+INSERT INTO pet_store VALUES (4, "Fish", 2, "Golden", 5.00, 50);
+INSERT INTO pet_store VALUES (5, "Snake", 2, "Green", 30.00, 30);
+INSERT INTO pet_store VALUES (6, "Rabbit", 2, "White", 65.00, 60);
+INSERT INTO pet_store VALUES (7, "Pig", 2, "Pink", 100.00, 27);
+INSERT INTO pet_store VALUES (8, "Bird", 2, "Rainbow", 15.00, 72);
+INSERT INTO pet_store VALUES (9, "Lizard", 2, "Green", 8.00, 17);
+INSERT INTO pet_store VALUES (10, "Gerbil", 2, "Blonde", 6.00, 39);
+INSERT INTO pet_store VALUES (11, "Rat", 2, "Black", 1.50, 1);
+INSERT INTO pet_store VALUES (12, "Ant", 2, "Red", 0.50, 2);
+INSERT INTO pet_store VALUES (13, "Monkey", 2, "Brown", 2000.00, 47);
+INSERT INTO pet_store VALUES (14, "Tiger", 2, "Orange", 5000.00, 26);
+INSERT INTO pet_store VALUES (15, "Duck", 2, "Yellow", 10.00, 66);
+
+---display the database ordered by price
+SELECT * FROM pet_store 
+ORDER BY price desc;
+
+--what is the avg price for pets? 
+SELECT AVG(price) "avg pet price"
+FROM pet_store
+where price; 
+
+--what are the most 5 popular pets? 
+SELECT species, price, popularity
+FROM pet_store
+order by popularity desc
+limit 5; 
