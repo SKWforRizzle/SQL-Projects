@@ -40,3 +40,18 @@ FROM FebSales
 LEFT JOIN customers
 ON FebSales.orderID = customers.order_ID
 WHERE FebSales.quantity > 2;
+
+/*testing filters*/
+SELECT distinct Product
+FROM BIT_DB.FebSales
+WHERE Product like '%Batteries%'
+
+SELECT distinct Product, Price
+FROM BIT_DB.FebSales 
+WHERE Price like '%.99'
+
+/*List all the products sold in Los Angeles in February, and include how many of each were sold.*/
+SELECT *, sum(quantity)
+FROM FebSales
+WHERE location like '%Los Angeles%'
+GROUP BY product;
