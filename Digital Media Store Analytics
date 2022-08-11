@@ -111,7 +111,6 @@ WHERE emp.Title = 'Sales Support Agent'
 GROUP BY emp.FirstName;
 
 /*Which sales agent made the most in sales in 2009?*/
-
 SELECT emp.FirstName, emp.LastName, ROUND(SUM(Inv.Total), 2) as 'Total Sales'
 FROM employees AS emp
 JOIN customers cust 
