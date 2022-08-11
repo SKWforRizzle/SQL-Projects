@@ -1,0 +1,124 @@
+/*In this SQL, I'm querying a dataset called chinook, which represents a digital media store and includes tables for artists, albums, media tracks, invoices, and customers. */
+
+/*Shows all data within the Customer table prior to analysis*/
+SELECT * FROM chinook.customers;
+
+/*Show Customers (their full names, customer ID, and country) who are not in the US. */
+SELECT * 
+FROM chinook.customers
+WHERE country != 'USA';
+
+/*Show only the Customers from Brazil.*/
+SELECT *
+FROM chinook.customers
+WHERE country = "Brazil";
+
+/*Show the Invoices of customers who are from Brazil. 
+The resulting table should show the customer's full name, 
+Invoice ID, Date of the invoice, and billing country*/
+SELECT * 
+FROM chinook.invoices;
+
+SELECT cust.FirstName, cust.LastName, inv.InvoiceId, inv.InvoiceDate, inv.BillingCountry, cust.Country
+FROM customers AS cust
+JOIN invoices AS inv
+ON cust.CustomerId = inv.InvoiceId
+WHERE cust.country = "Brazil";
+
+/*Show the Employees who are Sales Agents.*/
+SELECT *
+FROM employees;
+
+SELECT *
+FROM employees
+WHERE title = "Sales Support Agent";
+
+/*Find a unique/distinct list of billing countries from the Invoice table.*/
+SELECT DISTINCT BillingCountry
+FROM invoices;
+
+/*Provide a query that shows the invoices associated with each sales agent. 
+The resulting table should include the Sales Agent's full name.*/
+
+SELECT inv.InvoiceId, emp.LastName, emp.FirstName
+FROM invoices AS inv
+INNER JOIN customers AS cust
+ON inv.InvoiceID = cust.CustomerId
+INNER JOIN employees AS emp
+ON cust.SupportRepId = emp.EmployeeId
+ORDER BY inv.invoiceId;
+
+/*Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers.*/
+SELECT inv.InvoiceId, inv.Total, cust.FirstName, cust.LastName, cust.Country, emp.LastName, emp.FirstName
+FROM invoices AS inv
+INNER JOIN customers AS cust
+ON inv.InvoiceID = cust.CustomerId
+INNER JOIN employees AS emp
+ON cust.SupportRepId = emp.EmployeeId
+ORDER BY inv.invoiceId;
+
+/*How many Invoices were there in 2009?*/
+SELECT count(invoices.invoiceId)
+FROM invoices
+WHERE InvoiceDate BETWEEN '2009-01-01' AND '2009-12-31';
+
+/*What are the total sales for 2009?*/
+SELECT sum(invoices.total)
+FROM invoices
+WHERE InvoiceDate BETWEEN '2009-01-01' AND '2009-12-31';
+
+/*Write a query that includes the purchased track name with each invoice line item.*/
+
+SELECT *
+FROM invoice_items;
+
+SELECT tracks.name, invoice_items.InvoiceLineId
+FROM tracks
+JOIN invoice_items
+ON tracks.TrackId = invoice_items.TrackId
+ORDER BY invoice_items.TrackId;
+
+/*Write a query that includes the purchased track name AND artist name with each invoice line item.*/
+SELECT invoice_items.InvoiceLineId, artists.Name, tracks.name
+FROM tracks
+INNER JOIN invoice_items
+ON tracks.TrackId = invoice_items.TrackId
+INNER JOIN albums
+ON tracks.AlbumId = albums.AlbumId
+JOIN artists
+ON albums.ArtistId = artists.ArtistId
+ORDER BY artists.Name;
+
+/*Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre.*/
+SELECT tracks.name, albums.title, media_types.name, genres.name
+FROM tracks
+INNER JOIN albums
+ON tracks.AlbumId = albums.AlbumId
+INNER JOIN media_types
+ON tracks.MediaTypeId = media_types.MediaTypeId
+INNER JOIN genres
+ON tracks.GenreId = genres.GenreId
+ORDER BY tracks.name;
+
+/*Show the total sales made by each sales agent.*/
+SELECT emp.FirstName, emp.LastName, ROUND(SUM(Inv.Total), 2) as 'Total Sales'
+FROM employees AS emp
+JOIN customers cust 
+ON cust.SupportRepId = emp.EmployeeId
+JOIN invoices Inv 
+ON Inv.CustomerId = cust.CustomerId
+WHERE emp.Title = 'Sales Support Agent' 
+GROUP BY emp.FirstName;
+
+/*Which sales agent made the most in sales in 2009?*/
+
+SELECT emp.FirstName, emp.LastName, ROUND(SUM(Inv.Total), 2) as 'Total Sales'
+FROM employees AS emp
+JOIN customers cust 
+ON cust.SupportRepId = emp.EmployeeId
+JOIN invoices Inv 
+ON Inv.CustomerId = cust.CustomerId
+WHERE emp.Title = 'Sales Support Agent' 
+AND Inv.InvoiceDate LIKE '2009%' 
+GROUP BY emp.FirstName
+ORDER BY (round(sum(Inv.Total), 2))  DESC LIMIT 1;
